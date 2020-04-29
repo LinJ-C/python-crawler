@@ -1,0 +1,55 @@
+Selenuim篇
+
+1.找不到元素的原因：
+  1.xpath写错了
+  2.点击进入了一个新的页面。需要定位当前的句炳
+  driver.switch_to.window(driver.window_handles[1])
+
+  3.html中使用了iframe标签（在页面里面显示网页）
+  需要的定位一下：driver.switch_to.frame('mainFrame1')  #需先跳转到iframe框架
+                                          参数为：id或name，或者xpath定位
+
+还有其他语法
+
+切到frame中之后，我们便不能继续操作主文档的元素，这时如果想操作主文档内容，则需切回主文档。
+driver.switch_to.default_content()
+
+3.嵌套frame的操作(switch_to.parent_frame())
+有时候我们会遇到嵌套的frame，如下：
+
+<html>
+
+    <iframe id="frame1">
+
+        <iframe id="frame2" / >
+
+    </iframe>
+
+</html>
+
+1.从主文档切到frame2，一层层切进去
+
+driver.switch_to.frame("frame1")
+
+driver.switch_to.frame("frame2")
+
+2.从frame2再切回frame1，这里selenium给我们提供了一个方法能够从子frame切回到父frame，而不用我们切回主文档再切进来。
+driver.switch_to.parent_frame()  # 如果当前已是主文档，则无效果
+1
+1
+有了parent_frame()这个相当于后退的方法，我们可以随意切换不同的frame，随意的跳来跳去了。
+所以只要善用以下三个方法，遇到frame分分钟搞定：
+
+driver.switch_to.frame(reference)  //去某一个
+
+driver.switch_to.parent_frame()    //上一个
+
+driver.switch_to.default_content() //退出到主文档
+
+
+补充
+另外补充一下，还有《点分法》来切入嵌套frame的方法，用法如下：
+
+driver.switch_to.frame('frame1.0.frame3')
+
+据说以上代码可以切到 “frame1” 下的 “第一个frame” 下的 “frame3” 中。
